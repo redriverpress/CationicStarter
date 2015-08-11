@@ -1,8 +1,5 @@
 Starter.controllers
 
-  .controller 'DashCtrl', ($scope) ->
-    return
-
   .controller 'ChatsCtrl', ($scope, Chats) ->
     # With the new view caching in Ionic, Controllers are only called
     # when they are recreated or on app start, instead of every page change.
@@ -14,10 +11,3 @@ Starter.controllers
     $scope.chats  = Chats.all()
     $scope.remove = (chat) ->
       Chats.remove(chat)
-
-  .controller 'ChatDetailCtrl', ($scope, $stateParams, Chats) ->
-    $scope.chat = Chats.get $stateParams.chatId
-
-  .controller 'AccountCtrl', ($scope) ->
-    $scope.settings =
-      enableFriends: true
