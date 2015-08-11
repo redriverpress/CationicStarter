@@ -1,4 +1,4 @@
-angular.module 'starter.services', []
+Starter.services
 
   .factory 'Chats', ->
     # Might use a resource here that returns a JSON array
