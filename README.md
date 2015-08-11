@@ -17,7 +17,7 @@ With Node and PhantomJS installed (via a package manager or otherwise):
 - `npm install -g gulp cordova ionic` to install global dependencies
 - `npm install` to install project dependencies
 - `ionic serve` as usual
-- `gulp spec` for unit tests (in either CoffeeScript or JavaScript)
+- `gulp spec` for single test suite run (write your specs in CoffeeScript)
 - `gulp guard` for guard-like continuous testing
 - Refer to `gulpfile.js` for more commands
 - Refer to `spec/karma.conf.js` for test config
