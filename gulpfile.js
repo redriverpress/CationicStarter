@@ -16,10 +16,7 @@ var paths = {
   sass:   ['./scss/**/*.scss'],
   coffee: ['./coffee/**/*.coffee'],
   app:    ['./www/js/**/*.js'],
-  spec:   {
-    coffee: './spec/**/*_spec.coffee',
-    js:     './spec/**/*_spec.js'
-  }
+  spec:   ['./spec/support/**/*.coffee', './spec/**/*_spec.coffee']
 };
 
 gulp.task('default', ['assets', 'spec']);
@@ -44,9 +41,11 @@ gulp.task('coffee', function(done) {
   gulp.src(paths.coffee)
     .pipe(coffee({
         bare: true
-      }).on(
-        'error', gutil.log.bind(gutil, '[gulp-coffee]')
-    ))
+    }))
+    .on('error', function (err) {
+        gutil.log(err.stack);
+        this.emit('end');
+    })
     .pipe(concat('ionic.app.js'))
     .pipe(gulp.dest('./www/js'))
     .pipe(minifyJs({
@@ -58,12 +57,14 @@ gulp.task('coffee', function(done) {
 });
 
 gulp.task('spec', function(done) {
-  gulp.src(paths.spec.coffee)
+  gulp.src(paths.spec)
     .pipe(coffee({
         bare: true
-      }).on(
-        'error', gutil.log.bind(gutil, '[gulp-coffee]')
-    ))
+    }))
+    .on('error', function (err) {
+        gutil.log(err.stack);
+        this.emit('end');
+    })
     .pipe(concat('coffees_spec.js'))
     .pipe(gulp.dest('./spec/tmp'))
     .on('end', function() {
@@ -97,7 +98,7 @@ gulp.task('guard', function() {
   });
   process.stdin.setRawMode(true);
   process.stdin.resume();
-  gulp.watch([paths.spec.coffee, paths.spec.js, paths.app], ['spec']);
+  gulp.watch([paths.spec, paths.app], ['spec']);
 });
 
 gulp.task('install', ['git-check'], function() {
