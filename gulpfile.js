@@ -4,7 +4,6 @@ var gulp      = require('gulp'),
     concat    = require('gulp-concat'),
     sass      = require('gulp-sass'),
     minifyCss = require('gulp-minify-css'),
-    coffee    = require('gulp-coffee'),
     minifyJs  = require('gulp-uglify'),
     path      = require('path'),
     key       = require('keypress'),
@@ -14,14 +13,14 @@ var gulp      = require('gulp'),
 
 var paths = {
   sass:   ['./scss/**/*.scss'],
-  coffee: ['./coffee/**/*.coffee'],
+  js:     ['./js/**/*.js'],
   app:    ['./www/js/**/*.js'],
-  spec:   ['./spec/support/**/*.coffee', './spec/**/*_spec.coffee']
+  spec:   ['./spec/support/**/*.js', './spec/**/*_spec.js']
 };
 
 gulp.task('default', ['assets', 'spec']);
 
-gulp.task('assets', ['sass', 'coffee']);
+gulp.task('assets', ['sass', 'js']);
 
 gulp.task('sass', function(done) {
   gulp.src('./scss/ionic.app.scss')
@@ -37,15 +36,8 @@ gulp.task('sass', function(done) {
     .on('end', done);
 });
 
-gulp.task('coffee', function(done) {
-  gulp.src(paths.coffee)
-    .pipe(coffee({
-        bare: true
-    }))
-    .on('error', function (err) {
-        gutil.log(err.stack);
-        this.emit('end');
-    })
+gulp.task('js', function(done) {
+  gulp.src(paths.js)
     .pipe(concat('ionic.app.js'))
     .pipe(gulp.dest('./www/js'))
     .pipe(minifyJs({
@@ -57,30 +49,18 @@ gulp.task('coffee', function(done) {
 });
 
 gulp.task('spec', function(done) {
-  gulp.src(paths.spec)
-    .pipe(coffee({
-        bare: true
-    }))
-    .on('error', function (err) {
-        gutil.log(err.stack);
-        this.emit('end');
-    })
-    .pipe(concat('coffees_spec.js'))
-    .pipe(gulp.dest('./spec/tmp'))
-    .on('end', function() {
-      new karma.Server({
-        configFile: path.resolve('./spec/karma.conf.js'),
-        singleRun: true
-      }, function() {
-        sh.rm('-rf', './spec/tmp');
-        done();
-      }).start();
-    });
+  new karma.Server({
+    configFile: path.resolve('./spec/karma.conf.js'),
+    singleRun: true
+  }, function() {
+    sh.rm('-rf', './spec/tmp');
+    done();
+  }).start();
 });
 
 gulp.task('watch', function() {
   gulp.watch(paths.sass,   ['sass']);
-  gulp.watch(paths.coffee, ['coffee']);
+  gulp.watch(paths.js, ['js']);
 });
 
 gulp.task('guard', function() {

@@ -1,10 +1,7 @@
-Starter.services
-
-  .factory 'Chats', ->
-    # Might use a resource here that returns a JSON array
-
-    # Some fake testing data
-    chats = [ {
+Starter.services.factory('Chats', function() {
+  var chats;
+  chats = [
+    {
       id: 0,
       name: 'Ben Sparrow',
       lastText: 'You on your way?',
@@ -29,16 +26,24 @@ Starter.services
       name: 'Mike Harrington',
       lastText: 'This is wicked good ice cream.',
       face: 'https://pbs.twimg.com/profile_images/578237281384841216/R3ae1n61.png'
-    } ]
-
-    return {
-      all: ->
-        chats
-      remove: (chat) ->
-        chats.splice(chats.indexOf(chat), 1)
-      get: (chatId) ->
-        for chat in chats
-          if chat.id == parseInt(chatId)
-            return chat
-        return null
     }
+  ];
+  return {
+    all: function() {
+      return chats;
+    },
+    remove: function(chat) {
+      return chats.splice(chats.indexOf(chat), 1);
+    },
+    get: function(chatId) {
+      var chat, i, len;
+      for (i = 0, len = chats.length; i < len; i++) {
+        chat = chats[i];
+        if (chat.id === parseInt(chatId)) {
+          return chat;
+        }
+      }
+      return null;
+    }
+  };
+});
